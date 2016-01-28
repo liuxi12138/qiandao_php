@@ -8,6 +8,14 @@
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
 </head>
+<?php
+include("php/conn.php");
+ini_set('date.timezone','Asia/Shanghai');
+$date=date("Y-m-d");
+$sql="select * from `dutys`,`users` where date='$date' and `dutys`.`classid`=`users`.`classid` order by etime desc;";
+$query=mysqli_query($con,$sql);
+// var_dump(mysqli_fetch_array($query));
+?>
 <body>
 <div class="container-fluid">
 	<ul class="nav nav-pills">
@@ -34,36 +42,19 @@
 					<td>签退时间</td>
 					<td>值班日期</td>
 				</tr>
+<?php
+while($array=mysqli_fetch_array($query))
+{
+?>
 				<tr>
-					<td>刘熹</td>
-					<td>8:30</td>
-					<td>20:30</td>
-					<td>2016-1-26</td>
+					<td><?php echo $array['name'];?></td>
+					<td><?php echo $array['stime'];?></td>
+					<td><?php echo $array['etime'];?></td>
+					<td><?php echo $array['date'];?></td>
 				</tr>
-				<tr>
-					<td>刘熹</td>
-					<td>8:30</td>
-					<td>20:30</td>
-					<td>2016-1-26</td>
-				</tr>
-				<tr>
-					<td>刘熹</td>
-					<td>8:30</td>
-					<td>20:30</td>
-					<td>2016-1-26</td>
-				</tr>
-				<tr>
-					<td>刘熹</td>
-					<td>8:30</td>
-					<td>20:30</td>
-					<td>2016-1-26</td>
-				</tr>
-				<tr>
-					<td>刘熹</td>
-					<td>8:30</td>
-					<td>20:30</td>
-					<td>2016-1-26</td>
-				</tr>
+<?php
+}
+?>
 			</table>
 		</div>
 		<div class="col-md-4 col-sm-4 col-xs-4">附加功能框</div>
@@ -104,6 +95,9 @@
                         		break;
                         	case "qiantuisuccess":
                         		alert('签退成功');
+                        		break;
+                        	default:
+                        		alert('程序报错，请联系程序员');
                         		break;
                         }
                     }
