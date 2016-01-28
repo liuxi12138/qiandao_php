@@ -21,26 +21,31 @@ if(!empty($_GET['classid']))
 	}
 	else
 	{
-		echo $date;
-		echo $time;
+	// 	echo $date;
+	// 	echo $time;
 		$select_over="select * from dutys where classid='$classid' and date='$date';";
 		$over_query=mysqli_query($con,$select_over);
-		$over_array=mysqli_fetch_array($over_query);
-		var_dump($over_array);
-		// if ($over_array['over']==1||empty($over_array))
-		// {
-		// 	$sql="insert into dutys(id,classid,date,stime,etime,aorp,week,early,over) values('','$classid','$date','$time','','$aorp','$week','',0)";
-		// 	mysqli_query($con,$sql)or die('插入失败');
-		// 	$data['fankui']="success1";
-		// 	echo json_encode($data);
-		// }
-		// else if($over_array['over']==0)
-		// {
-		// 	$sql="update dutys set etime='$time',over=1 where classid='$classid' and over=0";
-		// 	mysqli_query($con,$sql)or die('更新失败');
-		// 	$data['fankui']="success2";
-		// 	echo json_encode($data);
-		// }
+		while($over_array=mysqli_fetch_array($over_query))
+		{
+			if($over_array['over']==1||empty($over_array))
+				$i=0;//本日没有签到记录or已经有过签退记录
+			else if($over_array['over']==0)
+				$i=1;//本日存在签到记录
+		}
+		if ($i==0)
+		{
+			$sql="insert into dutys(id,classid,date,stime,etime,aorp,week,early,over) values('','$classid','$date','$time','','$aorp','$week','',0)";
+			mysqli_query($con,$sql)or die('插入失败');
+			$data['fankui']="success1";
+			echo json_encode($data);
+		}
+		else if($i==1)
+		{
+			$sql="update dutys set etime='$time',over=1 where classid='$classid' and over=0";
+			mysqli_query($con,$sql)or die('更新失败');
+			$data['fankui']="success2";
+			echo json_encode($data);
+		}
 	}
 }
 // echo date("Y-m-d")."+++".date("H:i:s")."+++".date("N");
