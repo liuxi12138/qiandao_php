@@ -63,12 +63,18 @@ while($array=mysqli_fetch_array($query))
 		<div class="form-inline">
 			<div class="form-group">
 				<div class="input-group">
-					<input type="text" class="form-control" name="classid" id="exampleInputAmount" placeholder="学号">
+					<input type="text" class="form-control" autocomplete="off" name="classid" id="exampleInputAmount" placeholder="学号">
 				</div>
 			</div>
 			<div type="submit" class="btn btn-primary" id="qiandao">签到</div>
 		</div>	
         <script type="text/javascript">
+        	$(function(){
+				document.getElementById("exampleInputAmount").focus(); 
+			})
+			// $(function(){
+			// 	$("#exampleInputAmount").focus();
+			// })
             $("div#qiandao").click(function() {
                 qiandao();
             });
