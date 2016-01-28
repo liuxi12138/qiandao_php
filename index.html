@@ -72,11 +72,36 @@
 		<form class="form-inline">
 			<div class="form-group">
 				<div class="input-group">
-					<input type="text" class="form-control" id="exampleInputAmount" placeholder="学号">
+					<input type="text" class="form-control" name="classid" id="exampleInputAmount" placeholder="学号">
 				</div>
 			</div>
-			<button type="submit" class="btn btn-primary">签到</button>
+			<button type="submit" class="btn btn-primary" id="qiandao">签到</button>
 		</form>	
+        <script type="text/javascript">
+            $(function() {
+                $("#qiandao").click(function() {
+                    qiandao();
+                });
+            });
+            function qiandao() {
+                $.ajax({
+                    type: 'POST',
+                    url: 'php/qiandao.php',
+                    data: {
+                            classid: $("input:text[name='classid']").text()；
+                        },
+                    dataType: 'json',
+                    cache: false,
+                    error: function() {
+                        alert('学号不存在');
+                        return false;
+                    },
+                    success: function(json) {
+                        alert('签到成功');
+                    }
+                });
+            }
+        </script>
 	</div>
 </div>
 </div>
