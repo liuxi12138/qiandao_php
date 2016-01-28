@@ -89,15 +89,19 @@ while($array=mysqli_fetch_array($query))
                         {
                         	case "nouser":
                         		alert('学号不存在');
+                        		window.location.href=window.location.href;
                         		break;
                         	case "qiandaosuccess":
                         		alert('签到成功');
+                        		window.location.href=window.location.href;
                         		break;
                         	case "qiantuisuccess":
                         		alert('签退成功');
+                        		window.location.href=window.location.href;
                         		break;
                         	default:
                         		alert('程序报错，请联系程序员');
+                        		window.location.href=window.location.href;
                         		break;
                         }
                     }
