@@ -16,13 +16,14 @@ include('conn.php');
 
 if (!empty($_POST['insert']))
 {
-  $classid=$_POST['classid'];
-  $name=$_POST['name'];
-  $depart=$_POST['depart'];
-  $birthday=$_POST['birthday'];
-  $ondutys=$_POST['ondutys'];
-  $sql="insert into users(id,classid,name,depart,birthday,ondutys) values('','$classid','$name','$depart','$birthday','$ondutys');";
-  mysqli_query($con,$sql)or die('插入失败');
+    $classid=$_POST['classid'];
+    $name=$_POST['name'];
+    $depart=$_POST['depart'];
+    $birthday=$_POST['birthday'];
+    $ondutys=$_POST['ondutys'];
+    $class=$_POST['class'];
+    $sql="insert into users(id,classid,name,depart,birthday,ondutys,class) values('','$classid','$name','$depart','$birthday','$ondutys','$class');";
+    mysqli_query($con,$sql)or die('插入失败');
 }else{
 ?>
 <div class="container-fluid">
@@ -46,6 +47,12 @@ if (!empty($_POST['insert']))
     <div class="form-group">
       <label for="exampleInput">值班时间</label>
       <input type="text" name="ondutys" class="form-control">
+    </div>
+    <div class="form-group">
+      <select name="class">
+        <option value="0">试用</option>
+        <option value="1">正式</option>
+      </select>
     </div>
     <input type="submit" class="btn btn-default" value="submit" name="insert"/>
   </form>
