@@ -46,7 +46,7 @@ if(!empty($_POST['classid']))
 		}
 		if ($i==0)
 		{
-			$sql="insert into dutys(id,classid,date,stime,etime,aorp,week,early,over) values('','$classid','$date','$time','$time','$aorp','$week','',0)";
+			$sql="insert into dutys(id,classid,date,stime,etime,aorp,week,early,over) values('','$classid','$date','$time','$time','$aorp','$week',0,0)";
 			mysqli_query($con,$sql);
 			$data['fankui']="qiandaosuccess";
 			echo json_encode($data);
@@ -73,7 +73,7 @@ if (!empty($_GET['classid'])&&!empty($_GET['zaotui']))
 	$time=date("H:i:s");
 	$week=date("N");
 	$aorp=date("a");
-	$sql="update dutys set etime='$time',over=1 where classid='$classid' and over=0";
+	$sql="update dutys set etime='$time',over=1,early=1 where classid='$classid' and over=0";
 	mysqli_query($con,$sql);
 	header("Location: http://localhost/qiandao_php/index.php");
 }
