@@ -30,7 +30,14 @@ if(!empty($_POST['classid']))
 			if($over_array['over']==1||empty($over_array))
 				$i=0;//本日没有签到记录or已经有过签退记录
 			else if($over_array['over']==0)
+			{
+				$early_sql="select * from dutys where classid='$classid' and date='$date' and over=$over_array['over'];";
+				$early_query=mysqli_query($con,$early_sql);
+				$early_array=mysqli_fetch_array($early_query);
+				$stime=$early_array['stime'];
+				$time_cha=$time-$time;
 				$i=1;//本日存在签到记录
+			}
 		}
 		if ($i==0)
 		{
