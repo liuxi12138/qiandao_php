@@ -31,12 +31,17 @@ if(!empty($_POST['classid']))
 				$i=0;//本日没有签到记录or已经有过签退记录
 			else if($over_array['over']==0)
 			{
-				$early_sql="select * from dutys where classid='$classid' and date='$date' and over=$over_array['over'];";
+				$early_sql="select * from dutys where classid='$classid' and date='$date' and over='$over_array[over]';";
 				$early_query=mysqli_query($con,$early_sql);
 				$early_array=mysqli_fetch_array($early_query);
 				$stime=$early_array['stime'];
-				$time_cha=$time-$time;
-				$i=1;//本日存在签到记录
+				$time_cha=strtotime($time)-strtotime($stime);
+				if($time_cha<=4200)
+				{
+					$i=2;
+				}else{
+					$i=1;//本日存在签到记录
+				}
 			}
 		}
 		if ($i==0)
@@ -53,6 +58,23 @@ if(!empty($_POST['classid']))
 			$data['fankui']="qiantuisuccess";
 			echo json_encode($data);
 		}
+		else if($i==2)
+		{
+			$data['fankui']="zaotui";
+			echo json_encode($data);
+		}
 	}
+}
+if (!empty($_GET['classid'])&&!empty($_GET['zaotui']))
+{
+	$classid=$_GET['classid'];
+	$ceshitime=time();
+	$date=date("Y-m-d");
+	$time=date("H:i:s");
+	$week=date("N");
+	$aorp=date("a");
+	$sql="update dutys set etime='$time',over=1 where classid='$classid' and over=0";
+	mysqli_query($con,$sql);
+	header("Location: http://localhost/qiandao_php/index.php");
 }
 // echo date("Y-m-d")."+++".date("H:i:s")."+++".date("N");

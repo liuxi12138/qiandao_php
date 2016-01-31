@@ -79,7 +79,7 @@ while($array=mysqli_fetch_array($query))
                 qiandao();
             });
             function qiandao() {
-            	var classid=$("input:text[name='classid']").val();
+        		var classid=$("input:text[name='classid']").val();
             	// alert(classid);
                 $.ajax({
                     type: 'POST',
@@ -104,6 +104,19 @@ while($array=mysqli_fetch_array($query))
                         	case "qiantuisuccess":
                         		alert('签退成功');
                         		window.location.href=window.location.href;
+                        		break;
+                        	case "zaotui":
+                        		if(confirm("现在签退为时过早，是否继续签退？"))
+							    {
+							        window.location.href="http://localhost/qiandao_php/php/qiandao.php?zaotui=jixu&classid="+classid;
+							    }
+							    else
+							    {
+							      alert("恭喜，请继续享受在网站的时光吧！");
+							      window.location.href=window.location.href;
+							    }
+                        		// alert('早退');
+                        		// window.location.href=window.location.href;
                         		break;
                         	default:
                         		alert('程序报错，请联系程序员');
