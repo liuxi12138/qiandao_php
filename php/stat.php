@@ -37,6 +37,8 @@ while($user_array=mysqli_fetch_array($user_query))
 	// $num_sql="select count(*) from dutys where `dutys`.`classid`='$classid' and date >= '$sdate' and date <= '$edate';";
 	// $num_query=mysqli_query($con,$num_sql) or die("1");
 	// $num_array=mysqli_fetch_array($num_query);
+
+	
 	echo "<td>".$array['count(*)']."</td>";
 	$zaigang_sql="select count(*) from users,dutys where `users`.`classid`=`dutys`.`classid` and `users`.`onweek`=`dutys`.`week` and `users`.`ontime`=`dutys`.`ontime`;";
 	$zaigang_query=mysqli_query($con,$sql) or die("2");
