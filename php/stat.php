@@ -7,7 +7,7 @@ include('conn.php');
 $sdate="2016-1-1";
 $edate="2016-1-31";
 //查询dutys表中
-$sql="select * from dutys where date > '$sdate' and date < '$edate';";
+$sql="select count(*) from users,dutys where `users`.`classid`=`dutys`.`classid` and date > '$sdate' and date < '$edate';";
 $query=mysqli_query($con,$sql);
 
 while($array=mysqli_fetch_array($query))

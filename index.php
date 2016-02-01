@@ -120,7 +120,14 @@ while($array=mysqli_fetch_array($query))
 {
 ?>
 				<tr>
-					<td><?php echo $array['name'];?></td>
+					<td>
+						<?php
+							if ($array['users']['class']=0)
+								echo "试用 ".$array['name'];
+							else
+								echo $array['name'];
+						?>
+					</td>
 					<td><?php echo $array['stime'];?></td>
 					<td><?php echo $array['etime'];?></td>
 					<td><?php echo $array['date'];?></td>
