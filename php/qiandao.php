@@ -48,7 +48,25 @@ if(!empty($_POST['classid']))
 		}
 		if ($i==0)
 		{
-			$sql="insert into dutys(id,classid,date,stime,etime,aorp,week,early,over) values('','$classid','$date','$time','$time','$aorp','$week',0,0)";
+			switch($time)
+			{
+				case $time<='10:00:00':
+					$ontime="12";
+					break;
+				case $time>'10:00:00'&&$time<='12:00:00':
+					$ontime="34";
+					break;
+				case $time>'12:00:00'&&$time<='16:00:00':
+					$ontime="56";
+					break;
+				case $time>'16:00:00'&&$time<='18:00:00':
+					$ontime="78";
+					break;
+				case $time>'18:00:00':
+					$ontime="910";
+					break;
+			}
+			$sql="insert into dutys(id,classid,date,stime,etime,aorp,week,early,over,ontime) values('','$classid','$date','$time','$time','$aorp','$week',0,0,'$ontime')";
 			mysqli_query($con,$sql);
 			$data['fankui']="qiandaosuccess";
 			echo json_encode($data);

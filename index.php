@@ -122,9 +122,9 @@ while($array=mysqli_fetch_array($query))
 				<tr>
 					<td>
 						<?php
-							if ($array['users']['class']=0)
+							if ($array['class']==0)
 								echo "试用 ".$array['name'];
-							else
+							else if($array['class']==1)
 								echo $array['name'];
 						?>
 					</td>

@@ -20,9 +20,10 @@ if (!empty($_POST['insert']))
     $name=$_POST['name'];
     $depart=$_POST['depart'];
     $birthday=$_POST['birthday'];
-    $ondutys=$_POST['ondutys'];
     $class=$_POST['class'];
-    $sql="insert into users(id,classid,name,depart,birthday,ondutys,class) values('','$classid','$name','$depart','$birthday','$ondutys','$class');";
+    $onweek=$_POST['onweek'];
+    $ontime=$_POST['ontime'];
+    $sql="insert into users(id,classid,name,depart,birthday,class,onweek,ontime) values('','$classid','$name','$depart','$birthday','$class','$onweek','$ontime');";
     mysqli_query($con,$sql)or die('插入失败');
 }else{
 ?>
@@ -45,14 +46,22 @@ if (!empty($_POST['insert']))
       <input type="text" name="birthday" class="form-control">
     </div>
     <div class="form-group">
-      <label for="exampleInput">值班时间</label>
-      <input type="text" name="ondutys" class="form-control">
-    </div>
-    <div class="form-group">
-      <select name="class">
+      <label for="exampleInput">岗位</label>
+      <select name="class" class="form-control">
         <option value="0">试用</option>
         <option value="1">正式</option>
       </select>
+    </div>
+    <div class="form-group">
+      <div>
+        <label for="exampleInput">值班时间</label>
+      </div>
+      <div class="col-xs-6">
+        <input type="text" name="onweek" class="form-control">
+      </div>
+      <div class="col-xs-6">
+        <input type="text" name="ontime" class="form-control">
+      </div>
     </div>
     <input type="submit" class="btn btn-default" value="submit" name="insert"/>
   </form>
