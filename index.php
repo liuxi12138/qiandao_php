@@ -16,20 +16,93 @@ $sql="select * from `dutys`,`users` where date='$date' and `dutys`.`classid`=`us
 $query=mysqli_query($con,$sql);
 // var_dump(mysqli_fetch_array($query));
 ?>
+
 <body>
+<!-- 网站简介 -->
+<div class="modal fade" id="jianjie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">网站简介</h4>
+      </div>
+      <div class="modal-body">
+      	介绍内容
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 使用说明 -->
+<div class="modal fade" id="shuoming" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">使用说明</h4>
+      </div>
+      <div class="modal-body">
+      	介绍内容
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 作者简介 -->
+<div class="modal fade" id="jiyu" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">作者寄语</h4>
+      </div>
+      <div class="modal-body">
+      	介绍内容
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 作者简介 -->
+<div class="modal fade" id="zuozhejianjie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">作者简介</h4>
+      </div>
+      <div class="modal-body">
+      	介绍内容
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid">
 	<ul class="nav nav-pills">
 		<li role="presentation"><a href="#">后台管理</a></li>
-		<li role="presentation"><a href="#">网站简介</a></li>
+		<li role="presentation"><a href="#" data-toggle="modal" data-target="#jianjie">网站简介</a></li>
 		<li role="presentation" class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 			作者信息 <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu">
-	          <li><a href="#">使用说明</a></li>
-	          <li><a href="#">作者寄语</a></li>
+	          <li><a href="#" data-toggle="modal" data-target="#shuoming">使用说明</a></li>
+	          <li><a href="#" data-toggle="modal" data-target="#jiyu">作者寄语</a></li>
 	          <li role="separator" class="divider"></li>
-	          <li><a href="#">作者简介</a></li>
+	          <li><a href="#" data-toggle="modal" data-target="#zuozhejianjie">作者简介</a></li>
 	        </ul>
 		</li>
 	</ul>

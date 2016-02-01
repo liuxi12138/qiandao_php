@@ -39,7 +39,9 @@ if(!empty($_POST['classid']))
 				if($time_cha<=4200)
 				{
 					$i=2;
-				}else{
+				}
+				else
+				{
 					$i=1;//本日存在签到记录
 				}
 			}
