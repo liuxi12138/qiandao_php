@@ -6,13 +6,12 @@ include('conn.php');
 //接收统计的起止日期
 $sdate="2016-1-1";
 $edate="2016-2-3";
-//查询dutys表中
 
 
-// $sql="select * from users,dutys where `users`.`classid`=`dutys`.`classid` and date >= '$sdate' and date <= '$edate';";
-// $query=mysqli_query($con,$sql);
-// $array=mysqli_fetch_array($query);
-
+$sum_days=(strtotime($edate)-strtotime($sdate))/86400;
+$sweek=date("N",strtotime($sdate));
+$eweek=date("N",strtotime($edate));
+echo $sum_days."+++".$sweek."+++".$eweek;
 
 // var_dump($array);
 	echo "<table border=2>";
