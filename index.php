@@ -146,18 +146,15 @@ while($array=mysqli_fetch_array($query))
 					<input type="text" class="form-control" autocomplete="off" name="classid" id="exampleInputAmount" placeholder="学号">
 				</div>
 			</div>
-			<div type="submit" class="btn btn-primary" id="qiandao">签到</div>
+			<div type="submit" class="btn btn-primary" id="qiandao" onclick="javascript:qiandao()">签到</div>
 		</div>	
         <script type="text/javascript">
         	$(function(){
 				document.getElementById("exampleInputAmount").focus(); 
-			})
-			// $(function(){
-			// 	$("#exampleInputAmount").focus();
-			// })
-            $("div#qiandao").click(function() {
-                qiandao();
-            });
+			});
+            // $("div#qiandao").click(function() {
+            //     qiandao();
+            // });选择器调用js函数
             function qiandao() {
         		var classid=$("input:text[name='classid']").val();
             	// alert(classid);

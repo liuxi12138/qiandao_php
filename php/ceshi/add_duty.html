@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<title></title>
+    <meta charset="UTF-8">
+<head>
+</head>
+<body >
+<form id="form1">
+	<script language="javascript" type="text/javascript">
+
+	var count=0 ;
+	function additem(id)
+	{
+	    var row,cell,str;
+	    // row = document.getElementById(id).insertRow();
+	    if(row != null )
+	    {
+			cell = row.insertCell();
+			cell.innerHTML="<input id=\"St"+count+"\" type=\"text\" name=\"St"+count+"\" value= \"St"+count+"\"><input type=\"button\" value=\"删除\" onclick=\'deleteitem(this);\'>";
+			count ++;
+	    }
+	}
+	function deleteitem(obj)
+	{
+	    var curRow = obj.parentNode.parentNode;
+	    tb.deleteRow(curRow.rowIndex);
+	}
+
+	function getsub()
+	{
+	var re="";
+	for (var    i = 0 ;i<count;i++)
+	{
+	re += document.getElementsByName("St"+i)[0].value;
+
+	}
+	document.getElementById("Hidden1").value=re;
+	}
+	</script>
+	<table id="tb"></table>
+	<input name="button" type="button" onclick='additem("tb")' value="添加>>"/><br />
+	<input type="submit" name="submit" onclick="getsub()" value="提交"/>
+	<input id="Hidden1" name="Hidden1" type="hidden" value="" />
+</form>
+
+<br /><br /><br /><br /><br /><br /><br /><br />
+        <div id="divs">
+                <div id="div1">div1</div>
+                <div id="div2">div2</div>
+                <div id="div3">div3</div>
+                <div id="div4">div4</div>
+        </div>
+
+        <script>
+        
+        var oDivs=document.getElementById('divs');
+        var oDiv3=document.getElementById('div3'); //获取到div3，因为等下要把创建的div插入到div3前面。
+
+        var oDiv5=document.createElement('div'); //创建一个div元素。
+
+        oDiv5.id='div5'; //id样式可以先在样式表中写好，然后赋值一个id给创建出来的div元素。
+
+        oDiv5.innerHTML='<span>这是被创建出来的div5</span>';  //给创建出来的div添加内容，内容中可以有html标签嵌套。
+
+        oDivs.insertBefore(oDiv5,oDiv3); //在大的div元素下插入创建出来的元素，第一个参数是创建的div，第二个参数是要插入到哪个div前面。
+
+        </script>
+        <style>
+                div {border: 1px solid #666;padding: 5px; margin: 5px;}
+                #divs {width: 200px;}
+                #div5 {background: #ccc;}
+        </style>
+</body>
+</html>
