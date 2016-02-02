@@ -35,9 +35,18 @@ if (!empty($_POST['insert']))
     }
     for($i=1;$i<=$count;$i++)
     {
-      if
-      $sql_2="insert into user_dutys(id,classid,onweek,ontime) values('','$classid','$onweek[$i]','$ontime[$i]');";
-      mysqli_query($con,$sql_2)or die('插入值班时间失败');
+      $select_userdutys_sql="select * from user_dutys where classid='$classid' and onweek='".$onweek["$i"]."' and ontime='".$ontime["$i"]."';";
+      $select_userdutys_qurey=mysqli_query($con,$select_userdutys_sql);
+      $select_userdutys_array=mysqli_fetch_array($select_userdutys_qurey);
+      // var_dump($select_userdutys_array);
+      if(empty($select_userdutys_array))
+      {
+        $sql_2="insert into user_dutys(id,classid,onweek,ontime) values('','$classid','$onweek[$i]','$ontime[$i]');";
+        mysqli_query($con,$sql_2)or die('插入值班时间失败');
+        echo "插入".$onweek["$i"].",".$ontime["$i"]."的值班记录成功<br />";
+      }else{
+        echo "有".$onweek["$i"].",".$ontime["$i"]."的值班记录了<br />";
+      }
     }
     echo "插入成功";
 }else{
