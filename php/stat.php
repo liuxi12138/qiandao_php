@@ -1,6 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>值班统计</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<script type="text/javascript" src="../js/avalon.js"></script>
+	<script type="text/javascript" src="../js/jquery.js"></script>
+	<script type="text/javascript" src="../js/bootstrap.js"></script>
+</head>
+<body>
 <?php
 ini_set('date.timezone','Asia/Shanghai');
 header("Content-Type: text/html;charset=utf-8");
+header("Content-Type:application/vnd.ms-excel");  
+header("Content-Disposition:attachment;filename=sample.xls");  
+header("Pragma:no-cache");  
+header("Expires:0");
 include('conn.php');
 
 $ke_array=array('12'=>"第一，二节",'34'=>"第三，四节",'56'=>"第五，六节",'78'=>"第七，八节",'910'=>"第九，十节");
@@ -19,7 +35,7 @@ $sum_weeks=floor($sum_days/7);
 
 
 // var_dump($array);
-	echo "<table border=2>";
+	echo "<table class=\"table table-striped\">";
 	echo "<tr>";
 	echo "<td>姓名</td>";
 	echo "<td>值班总次数</td>";
@@ -82,12 +98,14 @@ while($user_array=mysqli_fetch_array($user_query))
 				if(!empty($zhiban_array))
 				{
 					// var_dump($zhiban_array);
-					$anshi_zhiban_array[$classid][$anshi_zhiban]=date("Y-m-d l",strtotime($zhiban_array['date']))." ".$ke_array[$zhiban_array['ontime']];
+					$anshi_zhiban_array[$classid][$anshi_zhiban]=date("Y-m-d l",strtotime($zhiban_array['date']))." ".$ke_array[$zhiban_array['ontime']]."; ";
+					// $anshi_zhiban_array[$classid][$anshi_zhiban]=date("Y-m-d l",strtotime($zhiban_array['date']))." ".$ke_array[$zhiban_array['ontime']]."<br />";
 					$anshi_zhiban++;
 				}
 				else
 				{
-					$no_anshi_zhiban_array[$classid][$no_anshi_zhiban]=date("Y-m-d l",strtotime($zhiban))." ".$ke_array[$user_dutys_array['ontime']]."<br />";
+					$no_anshi_zhiban_array[$classid][$no_anshi_zhiban]=date("Y-m-d l",strtotime($zhiban))." ".$ke_array[$user_dutys_array['ontime']]."; ";
+					// $no_anshi_zhiban_array[$classid][$no_anshi_zhiban]=date("Y-m-d l",strtotime($zhiban))." ".$ke_array[$user_dutys_array['ontime']]."<br />";
 					$no_anshi_zhiban++;
 				}
 				$anpai_zhiban++;
@@ -105,12 +123,22 @@ while($user_array=mysqli_fetch_array($user_query))
 	echo "<td>".$no_anshi_zhiban."</td>";
 
 	echo "<td>";//缺勤时间
+		// foreach ($no_anshi_zhiban_array[$classid] as $k=>$v)
+		// {
+		//     echo $v." ";
+		// }
+		$queqin_xiangxi="";
 		foreach ($no_anshi_zhiban_array[$classid] as $k=>$v)
 		{
-		    echo $v." ";
+		    $queqin_xiangxi= $queqin_xiangxi."\"".$v."\"&CHAR(10)&";
 		}
+		echo "=".$queqin_xiangxi."\" \"";
+
 	echo "</td>";
 	echo "</tr>";
 	
 }
 	echo "</table>";
+?>
+</body>
+</html>
