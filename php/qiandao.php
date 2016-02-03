@@ -25,27 +25,35 @@ if(!empty($_POST['classid']))
 	// 	echo $time;
 		$select_over="select * from dutys where classid='$classid' and date='$date';";
 		$over_query=mysqli_query($con,$select_over);
-		while($over_array=mysqli_fetch_array($over_query))
+		if(empty($over_array))
 		{
-			if($over_array['over']==1||empty($over_array))
-				$i=0;//本日没有签到记录or已经有过签退记录
-			else if($over_array['over']==0)
+			$i=0;
+		}
+		else
+		{
+			while($over_array=mysqli_fetch_array($over_query))
 			{
-				$early_sql="select * from dutys where classid='$classid' and date='$date' and over='$over_array[over]';";
-				$early_query=mysqli_query($con,$early_sql);
-				$early_array=mysqli_fetch_array($early_query);
-				$stime=$early_array['stime'];
-				$time_cha=strtotime($time)-strtotime($stime);
-				if($time_cha<=4200)
+				if($over_array['over']==1)
+					$i=0;//本日没有签到记录or已经有过签退记录
+				else if($over_array['over']==0)
 				{
-					$i=2;
-				}
-				else
-				{
-					$i=1;//本日存在签到记录
+					$early_sql="select * from dutys where classid='$classid' and date='$date' and over='$over_array[over]';";
+					$early_query=mysqli_query($con,$early_sql);
+					$early_array=mysqli_fetch_array($early_query);
+					$stime=$early_array['stime'];
+					$time_cha=strtotime($time)-strtotime($stime);
+					if($time_cha<=4200)
+					{
+						$i=2;//早退
+					}
+					else
+					{
+						$i=1;//本日存在签到记录
+					}
 				}
 			}
 		}
+		
 		if ($i==0)
 		{
 			switch($time)
