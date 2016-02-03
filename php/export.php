@@ -161,6 +161,10 @@ $objPHPExcel->setActiveSheetIndex(0);
 $filename=$sdate."-".$edate.".xlsx";
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save($filename);
+$oldname=dirname(__FILE__)."\\".$filename;
+$newname="c:\\".$filename;
+// rename("$oldname", "$newname");//移动文件
+copy("$oldname", "$newname");//复制文件
  
 echo "<br/>消耗的内存为：".memory_get_peak_usage(true) / 1024 / 1024;
 echo '<div>文件名：'.__FILE__.'</div>';
