@@ -25,7 +25,7 @@ if(!empty($_POST['classid']))
 	// 	echo $time;
 		$select_over="select * from dutys where classid='$classid' and date='$date';";
 		$over_query=mysqli_query($con,$select_over);
-		if(empty($over_array))
+		if(empty(mysqli_fetch_array($over_query)))
 		{
 			$i=0;
 		}
