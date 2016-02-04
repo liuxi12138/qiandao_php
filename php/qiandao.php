@@ -23,19 +23,20 @@ if(!empty($_POST['classid']))
 	{
 	// 	echo $date;
 	// 	echo $time;
+		$i=100;
 		$select_over="select * from dutys where classid='$classid' and date='$date';";
 		$over_query=mysqli_query($con,$select_over);
 		if(empty(mysqli_fetch_array($over_query)))
 		{
-			$i=0;
+			$i=0;//这一天未签到
 		}
 		else
 		{
 			while($over_array=mysqli_fetch_array($over_query))
 			{
 				if($over_array['over']==1)
-					$i=0;//本日没有签到记录or已经有过签退记录
-				else if($over_array['over']==0)
+					$i=0;//已经有过签退记录
+				else
 				{
 					$early_sql="select * from dutys where classid='$classid' and date='$date' and over='$over_array[over]';";
 					$early_query=mysqli_query($con,$early_sql);
