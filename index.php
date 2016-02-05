@@ -114,7 +114,7 @@ $query=mysqli_query($con,$sql);
 		      <div class="col-xs-6">
 		        <input type="text" id="edate" placeholder="截止时间" name="edate" class="form-control">
 		      </div>
-		      <button type="submit" class="btn btn-primary" onclick="javascript:daochu();">导出</button>
+		      <button type="submit" class="btn btn-primary qiandao" onclick="javascript:daochu();">导出</button>
 		    </div>
       </div>
     </div>
