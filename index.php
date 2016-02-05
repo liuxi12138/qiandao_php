@@ -154,8 +154,8 @@ while($array=mysqli_fetch_array($query))
 			});
             // $("div#qiandao").click(function() {
             //     qiandao();
-            // });选择器调用js函数
-            function qiandao() {
+            // });//选择器调用js函数
+            function qiandao(){
         		var classid=$("input:text[name='classid']").val();
             	// alert(classid);
                 $.ajax({
@@ -166,7 +166,13 @@ while($array=mysqli_fetch_array($query))
                         },
                     dataType: 'json',
                     cache: false,
-                    success: function(json) {
+                    // error:function(json){
+                    // 	var fankui=json.fankui;
+                    // 	if(fankui=="bug"){
+                    // 		alert("bug");
+                    // 	}
+                    // },
+                    success: function(json){
                     	var fankui=json.fankui;
                         switch(fankui)
                         {
@@ -196,7 +202,7 @@ while($array=mysqli_fetch_array($query))
                         		// window.location.href=window.location.href;
                         		break;
                         	default:
-                        		alert('程序报错，请联系程序员');
+                        		alert("程序报错，请联系程序员"+fankui);
                         		window.location.href=window.location.href;
                         		break;
                         }
