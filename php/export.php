@@ -1,23 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>对excel的测试实例_1</title>
-</head>
-<body>
 <?php
 error_reporting(E_ALL);
 date_default_timezone_set('Asia/Shanghai');
 header("Content-Type: text/html;charset=utf-8");
 include('conn.php');
 require_once 'Classes/PHPExcel.php';
-echo '当前时间：'.date('Y:m:d H:i:s');
+// echo '当前时间：'.date('Y:m:d H:i:s');
 
 $ke_array=array('12'=>"第一，二节",'34'=>"第三，四节",'56'=>"第五，六节",'78'=>"第七，八节",'910'=>"第九，十节");
 
 //接收统计的起止日期
-$sdate="2016-1-1";
-$edate="2016-2-3";
+// $sdate="2016-1-1";
+// $edate="2016-2-3";
+$sdate=$_POST['sdate'];
+$edate=$_POST['edate'];
 
 
 //计算这一周一共几个星期
@@ -165,11 +160,9 @@ $oldname=dirname(__FILE__)."\\".$filename;
 $newname="c:\\".$filename;
 // rename("$oldname", "$newname");//移动文件
 copy("$oldname", "$newname");//复制文件
- 
-echo "<br/>消耗的内存为：".memory_get_peak_usage(true) / 1024 / 1024;
-echo '<div>文件名：'.__FILE__.'</div>';
-echo '<div>php编译的行数：'.__LINE__.'</div>';
-echo '<div>php的类名：'.__CLASS__.'</div>';
-?>
-</body>
-</html>
+$data['daochu']="success";
+echo json_encode($data);
+// echo "<br/>消耗的内存为：".memory_get_peak_usage(true) / 1024 / 1024;
+// echo '<div>文件名：'.__FILE__.'</div>';
+// echo '<div>php编译的行数：'.__LINE__.'</div>';
+// echo '<div>php的类名：'.__CLASS__.'</div>';

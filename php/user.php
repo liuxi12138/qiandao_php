@@ -87,7 +87,8 @@ if (!empty($_POST['insert']))
       <div class="col-xs-6">
         <input type="text" name="ontime[1]" class="form-control">
       </div>
-    </div><div class="form-group">
+    </div>
+    <div class="form-group">
       <div>
         <label>值班时间(2)</label>
       </div>

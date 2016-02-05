@@ -7,4 +7,12 @@
 .qiandao{
 	width:99%;
 	margin-left:0.5%;
+	margin-top: 20px;
+}
+.qiandao_table{
+	height: 400px;
+	overflow:auto;
+}
+button{
+	margin-top: 15px;
 }

@@ -3,10 +3,18 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrapDatepickr-1.0.0.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script type="text/javascript" src="js/avalon.js"></script>
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/bootstrapDatepickr-1.0.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$("#sdate").bootstrapDatepickr({date_format: "Y-m-d"});
+			$("#edate").bootstrapDatepickr({date_format: "Y-m-d"});
+		});
+	</script>
 </head>
 <?php
 include("php/conn.php");
@@ -90,6 +98,80 @@ $query=mysqli_query($con,$sql);
   </div>
 </div>
 
+<!-- 统计值班信息 -->
+<div class="modal fade" id="daochu" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">统计值班信息</h4>
+      </div>
+      <div class="modal-body">
+		    <div class="form-group">
+		      <div class="col-xs-6">
+		        <input type="text" id="sdate" placeholder="开始时间" name="sdate" class="form-control">
+		      </div>
+		      <div class="col-xs-6">
+		        <input type="text" id="edate" placeholder="截止时间" name="edate" class="form-control">
+		      </div>
+		      <button type="submit" class="btn btn-primary" onclick="javascript:daochu();">导出</button>
+		    </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+	function daochu(){
+		var sdate=$("input:text[name='sdate']").val();
+		var edate=$("input:text[name='edate']").val();
+		if(sdate>edate)
+			alert("开始时间要早于截止时间");
+		else
+		{
+		    $.ajax({
+		        type: 'POST',
+		        url: 'php/export.php',
+		        data: {
+		                sdate: sdate,
+		                edate: edate
+		            },
+		        dataType: 'json',
+		        cache: false,
+		        success: function(json){
+		        	var daochu=json.daochu;
+		            if(daochu=="success")
+		            {
+	            		alert('导出成功');
+	            		window.location.href=window.location.href;
+	            	}
+	            	else
+	            	{
+	        			alert("导出程序报错，请联系程序员");
+	            		window.location.href=window.location.href;
+	            	}
+		        }
+		    });
+		}
+	}
+</script>
+
+<!-- 导入值班表 -->
+<div class="modal fade" id="daoru" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">导入值班表</h4>
+      </div>
+      <div class="modal-body">
+			<form class="form-group" method="post" action="php/reader.php" enctype="multipart/form-data">
+		        <input type="file" name="file_stu" id="exampleInputFile"/>
+		        <input type="submit" class="btn btn-primary qiandao" name="upfile" value="导入" />
+			</form>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="container-fluid">
 	<ul class="nav nav-pills">
 		<li role="presentation"><a href="#">后台管理</a></li>
@@ -107,7 +189,7 @@ $query=mysqli_query($con,$sql);
 		</li>
 	</ul>
 	<div class="row">
-		<div class="col-md-8 col-sm-8 col-xs-8">
+		<div class="col-md-8 col-sm-8 col-xs-8 qiandao_table">
 			<table class="table table-striped">
 				<tr>
 					<td>姓名</td>
@@ -137,7 +219,14 @@ while($array=mysqli_fetch_array($query))
 ?>
 			</table>
 		</div>
-		<div class="col-md-4 col-sm-4 col-xs-4">附加功能框</div>
+		<div class="col-md-4 col-sm-4 col-xs-4">
+			<div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">
+				<button type="button" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">导出值班表模板</button>
+				<button type="button" data-toggle="modal" data-target="#daoru" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">导入值班表</button>
+				<button type="button" data-toggle="modal" data-target="#daochu" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">统计值班情况</button>
+				<button type="button" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">添加生日</button>
+			</div>
+		</div>
 	</div>
 	<div class="row qiandao">
 		<div class="form-inline">
@@ -202,7 +291,7 @@ while($array=mysqli_fetch_array($query))
                         		// window.location.href=window.location.href;
                         		break;
                         	default:
-                        		alert("程序报错，请联系程序员"+fankui);
+                        		alert("签到程序报错，请联系程序员");
                         		window.location.href=window.location.href;
                         		break;
                         }
@@ -213,5 +302,6 @@ while($array=mysqli_fetch_array($query))
 	</div>
 </div>
 </div>
+
 </body>
 </html>
