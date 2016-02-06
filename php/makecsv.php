@@ -4,6 +4,7 @@ if (!empty($_POST['muban'])){
 	// var_dump($list);
 	$fp = fopen('C:\file.csv', 'w');
 	foreach ($list as $line) {
+		$line=mb_convert_encoding($line,"GBK","utf-8");
 		$csvline=explode('&', $line);
 		// var_dump($csvline);
 		fputcsv($fp,$csvline);

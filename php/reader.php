@@ -42,7 +42,7 @@ if(!empty($_FILES['file_stu']['tmp_name'])&&is_uploaded_file($_FILES['file_stu']
 		// echo "上传文件大小为0"; 
 		// } 
 
-$file=fopen('csvfile/reader.csv','rb');
+$file=fopen("csvfile/$filename",'rb');
 $data=array();//fgetcsv — 从文件指针中读入一行并解析 CSV 字段
 $row=0;
 $field=array("classid","name","depart","birthday","class","onweek_all");
