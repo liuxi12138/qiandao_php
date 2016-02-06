@@ -13,10 +13,10 @@
 <?php
 ini_set('date.timezone','Asia/Shanghai');
 header("Content-Type: text/html;charset=utf-8");
-header("Content-Type:application/vnd.ms-excel");  
-header("Content-Disposition:attachment;filename=sample.xls");  
-header("Pragma:no-cache");  
-header("Expires:0");
+// header("Content-Type:application/vnd.ms-excel");  
+// header("Content-Disposition:attachment;filename=sample.xls");  
+// header("Pragma:no-cache");  
+// header("Expires:0");
 include('conn.php');
 
 $ke_array=array('12'=>"第一，二节",'34'=>"第三，四节",'56'=>"第五，六节",'78'=>"第七，八节",'910'=>"第九，十节");
@@ -136,7 +136,6 @@ while($user_array=mysqli_fetch_array($user_query))
 
 	echo "</td>";
 	echo "</tr>";
-	
 }
 	echo "</table>";
 ?>

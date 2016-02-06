@@ -3,16 +3,17 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrapDatepickr-1.0.0.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrapDatepickr-1.0.0.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<script type="text/javascript" src="js/avalon.js"></script>
+	<!-- // <script type="text/javascript" src="js/avalon.js"></script> -->
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/bootstrap.js"></script>
-	<script type="text/javascript" src="js/bootstrapDatepickr-1.0.0.min.js"></script>
+	<script type="text/javascript" src="js/bootstrapDatepickr-1.0.0.js"></script>
 	<script>
 		$(document).ready(function() {
 			$("#sdate").bootstrapDatepickr({date_format: "Y-m-d"});
 			$("#edate").bootstrapDatepickr({date_format: "Y-m-d"});
+			$("#birthday").bootstrapDatepickr({date_format: "Y-m-d"});
 		});
 	</script>
 </head>
@@ -141,12 +142,12 @@ $query=mysqli_query($con,$sql);
 		        	var daochu=json.daochu;
 		            if(daochu=="success")
 		            {
-	            		alert('导出成功');
+	            		alert('导出值班统计成功');
 	            		window.location.href=window.location.href;
 	            	}
 	            	else
 	            	{
-	        			alert("导出程序报错，请联系程序员");
+	        			alert("导出值班统计程序报错，请联系程序员");
 	            		window.location.href=window.location.href;
 	            	}
 		        }
@@ -172,6 +173,71 @@ $query=mysqli_query($con,$sql);
     </div>
   </div>
 </div>
+
+<!-- 导出添加生日 -->
+<div class="modal fade" id="birthday_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">添加生日</h4>
+      </div>
+      <div class="modal-body">
+		<div class="form-group">
+			<label>学号</label>
+			<input type="text" name="classid" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="birthday">生日</label>
+			<input type="text" name="birthday" id="birthday" autocomplete="off" class="form-control">
+		</div>
+		<button type="submit" class="btn btn-primary qiandao" onclick="javascript:birthday();">添加</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+		<script type="text/javascript">
+		function birthday(){
+			var classid=$("input:text[name='classid']").val();
+			var birthday=$("input:text[name='birthday']").val();
+		    $.ajax({
+		        type: 'POST',
+		        url: 'php/addbirthday.php',
+		        data: {
+		        		classid: classid,
+		                birthday: birthday
+		            },
+		        dataType: 'json',
+		        cache: false,
+		        error:function(json){
+		        	alert("ajax失败");
+		        },
+		        success: function(json){
+		        	var shengri=json.shengri;
+		            if(shengri=="success")
+		            {
+	            		alert('添加生日成功');
+	            		window.location.href=window.location.href;
+	            	}
+	            	else if(shengri=="nouser")
+	            	{
+	            		alert('添加生日失败，未找到该用户');
+	            		window.location.href=window.location.href;
+	            	}
+	            	else
+	            	{
+	        			alert("添加生日程序报错，请联系程序员");
+	            		window.location.href=window.location.href;
+	            	}
+		        }
+		    });
+		}
+		</script>
+
+<!-- 主界面 -->
 <div class="container-fluid">
 	<ul class="nav nav-pills">
 		<li role="presentation"><a href="#">后台管理</a></li>
@@ -221,12 +287,75 @@ while($array=mysqli_fetch_array($query))
 		</div>
 		<div class="col-md-4 col-sm-4 col-xs-4">
 			<div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">
-				<button type="button" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">导出值班表模板</button>
+				<button type="button" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2" onclick="javascript:muban();">导出值班表模板</button>
 				<button type="button" data-toggle="modal" data-target="#daoru" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">导入值班表</button>
 				<button type="button" data-toggle="modal" data-target="#daochu" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">统计值班情况</button>
-				<button type="button" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">添加生日</button>
+				<button type="button" data-toggle="modal" data-target="#birthday_add" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">添加生日</button>
 			</div>
 		</div>
+		<script type="text/javascript">
+		function muban(){
+			var muban="not_null";
+		    $.ajax({
+		        type: 'POST',
+		        url: 'php/makecsv.php',
+		        data: {
+		                muban: muban
+		            },
+		        dataType: 'json',
+		        cache: false,
+		        success: function(json){
+		        	var daochu_muban=json.muban;
+		            if(daochu_muban=="success")
+		            {
+	            		alert('导出模板成功，C:\\file.csv');
+	            		window.location.href=window.location.href;
+	            	}
+	            	else
+	            	{
+	        			alert("导出模板程序报错，请联系程序员");
+	            		window.location.href=window.location.href;
+	            	}
+		        }
+		    });
+		}
+		</script>
+	</div>
+	<!-- 循环展示提示语 -->
+	<div class="row qiandao">
+		<div id="scrollDiv">
+			<ul>
+				<?php
+					$today=date("m-d");
+					$show_birthday="select * from users";
+					$show_birthday_query=mysqli_query($con,$show_birthday);
+					while($show_birthday_array=mysqli_fetch_array($show_birthday_query))
+					{
+						if (date("m-d",strtotime($date))==date("m-d",strtotime($show_birthday_array['birthday'])))
+						echo "<li>今天是".$show_birthday_array['name']."的生日</li>";
+					}
+				?>
+			    <li>当你的翅膀没了力量，激情衰退，实在是飞不动的时候，就飞了一半了</li>
+			    <li>每天叫你起床的不是闹钟，是梦想</li>
+			</ul>
+		</div>
+		<style type="text/css">
+		ul,li{margin:0;padding:0}
+			#scrollDiv{width:600px;height:25px;line-height:25px;overflow:hidden}
+			#scrollDiv li{height:25px;padding-left:10px;}
+		</style>
+		<script type="text/javascript">
+			function AutoScroll(obj){
+				$(obj).find("ul:first").animate({
+			 		marginTop:"-25px"
+				},1500,function(){
+					$(this).css({marginTop:"0px"}).find("li:first").appendTo(this);
+				});
+			}
+			$(document).ready(function(){
+				setInterval('AutoScroll("#scrollDiv")',3000);
+			});
+		</script>
 	</div>
 	<div class="row qiandao">
 		<div class="form-inline">
@@ -284,7 +413,7 @@ while($array=mysqli_fetch_array($query))
 							    }
 							    else
 							    {
-							      alert("恭喜，请继续享受在网站的时光吧！");
+							      alert("请继续享受在网站的时光吧！");
 							      window.location.href=window.location.href;
 							    }
                         		// alert('早退');
