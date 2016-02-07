@@ -6,21 +6,42 @@ if(!empty($_POST['delete_shiyong']))
 	// var_dump($_POST['user_array']);
 	$user_array=$_POST['user_array'];
 	// var_dump($user_array);
-	$num = count($user_array); 
+	$num = count($user_array);
 	for($i=0;$i<$num;$i++){ 
 		// echo $user_array[$i].'<br />'; 
-		$selete_user="select * from `users` where id='$user_array[$i]'";
-		$selete_user_query=mysqli_query($con,$selete_user) or die ('selete失败');
-		$selete_user_array=mysqli_fetch_array($selete_user_query);
+		$select_user="select * from `users` where id='$user_array[$i]'";
+		$select_user_query=mysqli_query($con,$select_user) or die ('select失败');
+		$select_user_array=mysqli_fetch_array($select_user_query);
 
-		$delete_shiyong_userduty="delete from `user_dutys` where classid='$selete_user_array[classid]'";
-		mysqli_query($con,$delete_shiyong_userduty) or die('user_dutys失败');
-		$delete_shiyong_duty="delete from `dutys` where classid='$selete_user_array[classid]'";
+		$delete_shiyong_duty="delete from `dutys` where classid='$select_user_array[classid]'";
 		mysqli_query($con,$delete_shiyong_duty) or die('dutys失败');
+		$delete_shiyong_userduty="delete from `user_dutys` where classid='$select_user_array[classid]'";
+		mysqli_query($con,$delete_shiyong_userduty) or die('user_dutys失败');
 
 		$delete_shiyong="delete from `users` where id='$user_array[$i]'";
 		mysqli_query($con,$delete_shiyong) or die('users失败');
-	} 
+	}
+}
+else if(!empty($_POST['delete_zhengshi']))
+{
+	$user_array=$_POST['user_array'];
+	$num = count($user_array);
+	for($i=0;$i<$num;$i++){
+		$select_user="select * from `users` where id='$user_array[$i]'";
+		$select_user_query=mysqli_query($con,$select_user) or die ('select失败');
+		$select_user_array=mysqli_fetch_array($select_user_query);
+
+		$delete_zhengshi_dutys="delete from `dutys` where classid='$select_user_array[classid]';";
+		mysqli_query($con,$delete_zhengshi_dutys) or die('dutys失败');
+		$delete_zhengshi_userduty="delete from `user_dutys` where classid='$select_user_array[classid]'";
+		mysqli_query($con,$delete_zhengshi_userduty) or die('user_dutys失败');
+
+		//删除users里的退站成员记录 or 新建一个old_users
+	}
+}
+else if(!empty($_POST['delete_all']))
+{
+	//清空值班表
 }
 else
 {
