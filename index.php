@@ -185,7 +185,7 @@ $query=mysqli_query($con,$sql);
       <div class="modal-body">
 		<div class="form-group">
 			<label>学号</label>
-			<input type="text" name="classid" class="form-control">
+			<input type="text" name="birth_classid" class="form-control">
 		</div>
 		<div class="form-group">
 			<label for="birthday">生日</label>
@@ -201,13 +201,13 @@ $query=mysqli_query($con,$sql);
 </div>
 		<script type="text/javascript">
 		function birthday(){
-			var classid=$("input:text[name='classid']").val();
+			var birth_classid=$("input:text[name='birth_classid']").val();
 			var birthday=$("input:text[name='birthday']").val();
 		    $.ajax({
 		        type: 'POST',
 		        url: 'php/addbirthday.php',
 		        data: {
-		        		classid: classid,
+		        		classid: birth_classid,
 		                birthday: birthday
 		            },
 		        dataType: 'json',
@@ -384,12 +384,9 @@ while($array=mysqli_fetch_array($query))
                         },
                     dataType: 'json',
                     cache: false,
-                    // error:function(json){
-                    // 	var fankui=json.fankui;
-                    // 	if(fankui=="bug"){
-                    // 		alert("bug");
-                    // 	}
-                    // },
+                    error:function(json){
+                    	alert('ajax失败');
+                    },
                     success: function(json){
                     	var fankui=json.fankui;
                         switch(fankui)
