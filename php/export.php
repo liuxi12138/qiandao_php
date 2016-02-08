@@ -6,6 +6,7 @@ include('conn.php');
 require_once 'Classes/PHPExcel.php';
 // echo '当前时间：'.date('Y:m:d H:i:s');
 
+    $gangwei=array("试用","正式","退站");
 $ke_array=array('12'=>"第一，二节",'34'=>"第三，四节",'56'=>"第五，六节",'78'=>"第七，八节",'910'=>"第九，十节");
 
 //接收统计的起止日期
@@ -46,7 +47,7 @@ $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('H1', '缺勤时间');
 
     $x=2;
-    $user_query=mysqli_query($con,"select * from users;");
+    $user_query=mysqli_query($con,"select * from users where class=0 or class=1;");
 while($user_array=mysqli_fetch_array($user_query))
 {
         $classid=$user_array['classid'];
@@ -110,8 +111,9 @@ while($user_array=mysqli_fetch_array($user_query))
             $queqin_xiangxi= $queqin_xiangxi.$v."&CHAR(10)&";
         }
         $queqin_xiangxi="=".$queqin_xiangxi."\" \"";
+        $user_name=$gangwei[$user_array['class']].$user_array['name'];
     $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue("A$x", $user_array['name'])
+            ->setCellValue("A$x", $user_name)
             ->setCellValue("B$x", $array['count(*)'])
             ->setCellValue("C$x", $over_array['count(*)'])
             ->setCellValue("D$x", $anshi_zhiban)

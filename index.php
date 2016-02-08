@@ -1,3 +1,12 @@
+<?php
+session_start();
+include("php/conn.php");
+ini_set('date.timezone','Asia/Shanghai');
+$date=date("Y-m-d");
+$sql="select * from `dutys`,`users` where date='$date' and `dutys`.`classid`=`users`.`classid` order by etime desc;";
+$query=mysqli_query($con,$sql);
+// var_dump(mysqli_fetch_array($query));
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,16 +26,31 @@
 		});
 	</script>
 </head>
-<?php
-include("php/conn.php");
-ini_set('date.timezone','Asia/Shanghai');
-$date=date("Y-m-d");
-$sql="select * from `dutys`,`users` where date='$date' and `dutys`.`classid`=`users`.`classid` order by etime desc;";
-$query=mysqli_query($con,$sql);
-// var_dump(mysqli_fetch_array($query));
-?>
 
 <body>
+<!-- 登录 -->
+<div class="modal fade" id="back" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">登录</h4>
+      </div>
+      <div class="modal-body">
+      	<form class="form-group" action="index.php" method="post">
+		      <div class="col-xs-10 col-xs-offset-1">
+		        <input type="password" name="pwd" class="form-control">
+		      </div>
+		      <button type="submit" class="btn btn-primary col-xs-10 col-xs-offset-1">登录</button>
+      	</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 网站简介 -->
 <div class="modal fade" id="jianjie" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -240,7 +264,7 @@ $query=mysqli_query($con,$sql);
 <!-- 主界面 -->
 <div class="container-fluid">
 	<ul class="nav nav-pills">
-		<li role="presentation"><a href="#">后台管理</a></li>
+		<li role="presentation"><a href="#" data-toggle="modal" data-target="#back">后台管理</a></li>
 		<li role="presentation"><a href="#" data-toggle="modal" data-target="#jianjie">网站简介</a></li>
 		<li role="presentation" class="dropdown">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -270,10 +294,20 @@ while($array=mysqli_fetch_array($query))
 				<tr>
 					<td>
 						<?php
-							if ($array['class']==0)
-								echo "试用 ".$array['name'];
-							else if($array['class']==1)
-								echo $array['name'];
+							switch ($array['class']) {
+								case 0:
+									echo "试用 ".$array['name'];
+									break;
+								case 1:
+									echo $array['name'];
+									break;
+								case 2:
+									echo $array['name']." 回家了";
+									break;
+								default:
+									echo $array['name'];
+									break;
+							}
 						?>
 					</td>
 					<td><?php echo $array['stime'];?></td>
@@ -287,10 +321,30 @@ while($array=mysqli_fetch_array($query))
 		</div>
 		<div class="col-md-4 col-sm-4 col-xs-4">
 			<div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">
+			<?php
+			//判断登录是否成功
+			if (!empty($_POST['pwd'])&&$_POST['pwd']=="jiubugaosuni!") {
+				$_SESSION['admin']="right";
+			?>
+				<a href="php/user_table.php"><button type="button" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2" >用户管理</button></a>
 				<button type="button" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2" onclick="javascript:muban();">导出值班表模板</button>
 				<button type="button" data-toggle="modal" data-target="#daoru" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">导入值班表</button>
 				<button type="button" data-toggle="modal" data-target="#daochu" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">统计值班情况</button>
 				<button type="button" data-toggle="modal" data-target="#birthday_add" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">添加生日</button>
+				<a href="php/makecsv.php?tuichu=tuichu"><!--借这个文件用一下，清除一下登录记录，懒得单独写个文件了-->
+					<button type="button" data-toggle="modal" data-target="#birthday_add" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">退出登录</button>
+				</a>
+			<?php
+			}else{
+			?>
+				<button type="button" disabled="disabled" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2" >用户管理</button>
+				<button type="button" disabled="disabled" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2" onclick="javascript:muban();">导出值班表模板</button>
+				<button type="button" disabled="disabled" data-toggle="modal" data-target="#daoru" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">导入值班表</button>
+				<button type="button" disabled="disabled" data-toggle="modal" data-target="#daochu" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">统计值班情况</button>
+				<button type="button" data-toggle="modal" data-target="#birthday_add" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">添加生日</button>
+			<?php
+			}
+			?>
 			</div>
 		</div>
 		<script type="text/javascript">
