@@ -27,7 +27,7 @@ $query=mysqli_query($con,$sql);
 	</script>
 </head>
 
-<body>
+<body onkeydown="BindEnter(event)">
 <!-- 登录 -->
 <div class="modal fade" id="back" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -37,11 +37,13 @@ $query=mysqli_query($con,$sql);
         <h4 class="modal-title" id="myModalLabel">登录</h4>
       </div>
       <div class="modal-body">
-      	<form class="form-group" action="index.php" method="post">
+      	<form class="form-group row" action="index.php" method="post">
 		      <div class="col-xs-10 col-xs-offset-1">
 		        <input type="password" name="pwd" class="form-control">
 		      </div>
-		      <button type="submit" class="btn btn-primary col-xs-10 col-xs-offset-1">登录</button>
+		      <div class="col-xs-10 col-xs-offset-1">
+		      	<button type="submit" class="btn btn-primary col-xs-12">登录</button>
+		      </div>
       	</form>
       </div>
       <div class="modal-footer">
@@ -133,10 +135,10 @@ $query=mysqli_query($con,$sql);
       </div>
       <div class="modal-body">
 		    <div class="form-group">
-		      <div class="col-xs-6">
+		      <div class="col-xs-6 col-md-6 col-xs-6">
 		        <input type="text" id="sdate" placeholder="开始时间" name="sdate" class="form-control">
 		      </div>
-		      <div class="col-xs-6">
+		      <div class="col-xs-6 col-md-6 col-xs-6">
 		        <input type="text" id="edate" placeholder="截止时间" name="edate" class="form-control">
 		      </div>
 		      <button type="submit" class="btn btn-primary qiandao" onclick="javascript:daochu();">导出</button>
@@ -320,7 +322,7 @@ while($array=mysqli_fetch_array($query))
 			</table>
 		</div>
 		<div class="col-md-4 col-sm-4 col-xs-4">
-			<div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">
+			<div class="col-md-12 col-sm-12 col-xs-12">
 			<?php
 			//判断登录是否成功
 			if (!empty($_POST['pwd'])&&$_POST['pwd']=="jiubugaosuni!") {
@@ -427,6 +429,15 @@ while($array=mysqli_fetch_array($query))
             // $("div#qiandao").click(function() {
             //     qiandao();
             // });//选择器调用js函数
+			function BindEnter(obj) {
+			//使用document.getElementById获取到按钮对象    
+				var button = document.getElementById('qiandao');    
+				if(obj.keyCode == 13)        
+				{
+					button.click();           
+					obj.returnValue = false;        
+				}
+			}
             function qiandao(){
         		var classid=$("input:text[name='classid']").val();
             	// alert(classid);
@@ -460,7 +471,7 @@ while($array=mysqli_fetch_array($query))
                         	case "zaotui":
                         		if(confirm("现在签退为时过早，是否继续签退？"))
 							    {
-							        window.location.href="http://localhost/qiandao_php/php/qiandao.php?zaotui=jixu&classid="+classid;
+							        window.location.href="php/qiandao.php?zaotui=jixu&classid="+classid;
 							    }
 							    else
 							    {
