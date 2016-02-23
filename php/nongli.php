@@ -1,9 +1,5 @@
 <?php
 header("Content-Type: text/html;charset=utf-8");
-/*
-    云南省曲靖师范学院计算机科学与工程学院-杨海熙编写
-    2009-9-3
-*/ 
 class Lunar
 {
     private  $_SMDay = array(1 => 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);//定义公历月分天数
@@ -215,66 +211,12 @@ class Lunar
         //if($Ltype) $Ldate.="(闰)";
         //return $Ldate;
     }
-    //农历转公历(date：农历日期； type：是否闰月)
-    public function L2S($date,$type = 0)
-    {
-        list($year, $month, $day) = explode("-",$date);
-        if($year <= 1951 || $month <= 0 || $day <= 0 || $year >= 2051 ) return false;
-        $Larray = $this->_LMDay[$year - $this->_LStart];
-        if($type == 1 && count($Larray)<=12 ) return false;//要求查询闰，但查无闰月
-        //如果查询的农历是闰月并该年度农历数组存在闰月数据就获取
-        if($Larray[$month]>30 && $type == 1 && count($Larray) >=13)   $day = $Larray[13] + $day;
-        //获取该年农历日期到公历1月1日的天数
-        $days = $day;
-        for($i=0;$i<=$month-1;$i++)
-            $days += $Larray[$i];
-        //当查询农历日期距离公历1月1日超过一年时
-        if($days > 366 || ($this->GetSMon($month,2)!=29 && $days>365 ))
-        {
-            $Syear = $year +1;
-            if($this->GetSMon($month,2)!=29) 
-                $days-=366;
-            else
-                $days-=365;
-            if($days > $this->_SMDay[1]) 
-            {
-                $Smonth = 2;
-                $Sday = $days - $this->_SMDay[1];
-            }
-            else
-            {
-                $Smonth = 1;
-                $Sday = $days;
-            }       
-        }
-        else
-        {
-            $Syear =$year;
-            for($i=1;$i<=12;$i++)
-            {
-                if($days > $this->GetSMon($Syear,$i))
-                    $days-=$this->GetSMon($Syear,$i);
-                else
-                {
-                    $Smonth = $i;
-                    $Sday = $days;
-                    break;
-                }
-            }
-        }
-        return mktime(0, 0, 0, $Smonth, $Sday, $Syear);
-        //$Sdate = $Syear."-".$Smonth."-".$Sday;
-        //return $Sdate;
-    }
 }
-
-    $today = date("Y-m-d");
-    $lunar = new Lunar();
-    //公历转农历
-    $nl = date("Y-m-d",$lunar->S2L($today));
-    //农历转公历
-    $gl = date("Y-m-d",$lunar->L2S($nl));    
-    echo "今天公历是:$today<br/>";
-    echo "转为农历是:$nl<br/>";
-    echo "转回公历是:$gl<br/>";
+    // $rili=array('阳历','农历');
+    // $today = date("Y-m-d");
+    // $lunar = new Lunar();
+    // //公历转农历
+    // $nl = date("Y-m-d",$lunar->S2L($today));
+    // echo "今天公历是:$today<br/>";
+    // echo "转为农历是:$nl<br/>";
 ?>

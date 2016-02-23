@@ -14,7 +14,8 @@
 <?php
 session_start();
 header("Content-Type: text/html;charset=utf-8");
-include('conn.php');
+include_once('conn.php');
+include_once('nongli.php');
 if(!empty($_SESSION['admin']))
 {
     if (!empty($_POST['insert']))
@@ -24,6 +25,7 @@ if(!empty($_SESSION['admin']))
         $name=$_POST['name'];
         $depart=$_POST['depart'];
         $birthday=$_POST['birthday'];
+        $isnongli=$_POST['isnongli'];
         $class=$_POST['class'];
         $onweek=$_POST['onweek'];
         $ontime=$_POST['ontime'];
@@ -31,9 +33,14 @@ if(!empty($_SESSION['admin']))
         $select_user_sql="select * from users where classid='$classid'";
         $select_user_qurey=mysqli_query($con,$select_user_sql);
         $select_user_array=mysqli_fetch_array($select_user_qurey);
+        if ($isnongli==1)
+        {
+            $lunar = new Lunar();
+            $birthday=date("Y-m-d",$lunar->S2L($birthday));
+        }
         if (empty($select_user_array))
         {
-          $sql="insert into users(id,classid,name,depart,birthday,class) values('','$classid','$name','$depart','$birthday','$class');";
+          $sql="insert into users(id,classid,name,depart,birthday,class,isnongli) values('','$classid','$name','$depart','$birthday','$class','$isnongli');";
           mysqli_query($con,$sql)or die('插入用户失败');
         }
         for($i=0;$i<$count;$i++)
@@ -169,7 +176,17 @@ if(!empty($_SESSION['admin']))
         </div>
         <div class="form-group">
           <label>生日</label>
-          <input type="text" name="birthday" class="form-control">
+          <div class="row">
+              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                <input type="text" name="birthday" placeholder="1994-04-02" class="form-control">
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                  <select name="isnongli" class="form-control">
+                      <option value="0">过公历生日</option>
+                      <option value="1">过农历生日</option>
+                  </select>
+              </div>
+          </div>
         </div>
         <div class="form-group">
           <label>岗位</label>
