@@ -13,11 +13,6 @@ if (!empty($_POST['muban'])){
 	$data['muban']="success";
 	echo json_encode($data);
 }
-else if(!empty($_GET['tuichu'])&&$_GET['tuichu']=="tuichu")
-{
-	unset($_SESSION['admin']);
-	header("location:../index.php");
-}
 else
 {
 	$data['muban']="fail";

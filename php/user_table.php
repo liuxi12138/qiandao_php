@@ -100,6 +100,7 @@ if(!empty($_SESSION['admin']))
 		<input type="submit" name="delete_zhengshi" class="btn btn-danger" value="正式成员的退站">
 		<input type="submit" name="delete_all" class="btn btn-danger" value="清空值班表及成员名单">
 		<a href="user.php"><input class="btn btn-success" value="添加值班人员"></a>
+		<a href="../index.php"><input class="btn btn-success" value="返回首页"></a>
 	</form>
 	<script language="javascript"> 
 	//选中全选按钮，下面的checkbox全部选中 

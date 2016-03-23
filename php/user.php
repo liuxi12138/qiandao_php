@@ -68,12 +68,18 @@ if(!empty($_SESSION['admin']))
         $name=$_POST['name'];
         $depart=$_POST['depart'];
         $birthday=$_POST['birthday'];
+        $isnongli=$_POST['isnongli'];
         $class=$_POST['class'];
         $onweek=$_POST['onweek'];
         $ontime=$_POST['ontime'];
-        var_dump($_POST);
+        if ($isnongli==1)
+        {
+            $lunar = new Lunar();
+            $birthday=date("Y-m-d",$lunar->S2L($birthday));
+        }
+        // var_dump($_POST);
 
-            $update_user="update users set classid='$classid',name='$name',depart='$depart',birthday='$birthday',class='$class' where id='$id'";
+            $update_user="update users set classid='$classid',name='$name',depart='$depart',birthday='$birthday',class='$class',isnongli='$isnongli' where id='$id'";
             mysqli_query($con,$update_user)or die("失败");
             $delete_user_dutys="delete from user_dutys where classid='$classid'";
             mysqli_query($con,$delete_user_dutys);
@@ -115,7 +121,19 @@ if(!empty($_SESSION['admin']))
       </div>
       <div class="form-group">
         <label>生日</label>
-        <input type="text" name="birthday" class="form-control" value="<?php echo $select_update_user_array['birthday'];?>">
+        <label><span class="text-danger">#日期一律填公历，程序会自动转化</span></label><br />
+        <label><span class="text-danger">#选择过农历生日的，更新前显示的是农历</span></label>
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+              <input type="text" name="birthday" value="<?php echo $select_update_user_array['birthday'];?>" class="form-control">
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                <select name="isnongli" class="form-control">
+                    <option value="0">过公历生日</option>
+                    <option value="1">过农历生日</option>
+                </select>
+            </div>
+        </div>
       </div>
     <?php
     $gangwei=array("试用","正式","退站");
@@ -153,6 +171,7 @@ if(!empty($_SESSION['admin']))
           <botton type="submit" class="btn btn-primary" onclick="javascript:add();">添加值班</botton>
         </div>
         <input type="submit" class="btn btn-default" value="更新" name="update"/>
+        <a href="../index.php"><input class="btn btn-success" value="返回首页"></a>
       </form>
 
     <?php
@@ -221,6 +240,7 @@ if(!empty($_SESSION['admin']))
           <botton type="submit" class="btn btn-primary" onclick="javascript:add();">添加值班</botton>
         </div>
         <input type="submit" class="btn btn-default" value="添加" name="insert"/>
+        <a href="../index.php"><input class="btn btn-success" value="返回首页"></a>
       </form>
     <?php
     }

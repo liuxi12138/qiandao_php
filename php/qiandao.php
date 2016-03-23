@@ -89,7 +89,7 @@ if(!empty($_POST['classid']))
 						$ontime="910";
 						break;
 				}
-				$sql="insert into dutys(id,classid,date,stime,etime,aorp,week,early,over,ontime) values('','$classid','$date','$time','$time','$aorp','$week',0,0,'$ontime')";
+				$sql="insert into dutys(classid,date,stime,etime,aorp,week,early,over,ontime) values('$classid','$date','$time','$time','$aorp','$week',0,0,'$ontime')";
 				mysqli_query($con,$sql);
 				$data['fankui']="qiandaosuccess";
 				echo json_encode($data);
@@ -132,7 +132,7 @@ if(!empty($_POST['classid']))
 		// 			$ontime="910";
 		// 			break;
 		// 	}
-		// 	$sql="insert into dutys(id,classid,date,stime,etime,aorp,week,early,over,ontime) values('','$classid','$date','$time','$time','$aorp','$week',0,0,'$ontime')";
+		// 	$sql="insert into dutys(classid,date,stime,etime,aorp,week,early,over,ontime) values('$classid','$date','$time','$time','$aorp','$week',0,0,'$ontime')";
 		// 	mysqli_query($con,$sql);
 		// 	$data['fankui']="qiandaosuccess";
 		// 	echo json_encode($data);

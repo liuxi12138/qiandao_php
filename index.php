@@ -1,6 +1,8 @@
 <?php
 session_start();
 include("php/conn.php");
+include_once("php/nongli.php");
+$rili=array('公历','农历');
 ini_set('date.timezone','Asia/Shanghai');
 $date=date("Y-m-d");
 $sql="select * from `dutys`,`users` where date='$date' and `dutys`.`classid`=`users`.`classid` order by etime desc;";
@@ -25,6 +27,18 @@ $query=mysqli_query($con,$sql);
 			$("#birthday").bootstrapDatepickr({date_format: "Y-m-d"});
 		});
 	</script>
+	<?php
+		//验证密码定义session
+		if (!empty($_POST['pwd'])&&$_POST['pwd']=="jiubugaosuni!")
+		{
+			$_SESSION['admin']="right";
+		}
+		else if(!empty($_GET['tuichu'])&&$_GET['tuichu']=="tuichu")
+		{
+			unset($_SESSION['admin']);
+			header("location:index.php");
+		}
+	?>
 </head>
 
 <body onkeydown="BindEnter(event)">
@@ -215,7 +229,17 @@ $query=mysqli_query($con,$sql);
 		</div>
 		<div class="form-group">
 			<label for="birthday">生日</label>
-			<input type="text" name="birthday" id="birthday" autocomplete="off" class="form-control">
+			<div class="row">
+			  <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+			    <input type="text" name="birthday" id="birthday" autocomplete="off" placeholder="1994-04-02" class="form-control">
+			  </div>
+			  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+			      <select name="isnongli" class="form-control">
+			          <option value="0">过公历生日</option>
+			          <option value="1">过农历生日</option>
+			      </select>
+			  </div>
+			</div>
 		</div>
 		<button type="submit" class="btn btn-primary qiandao" onclick="javascript:birthday();">添加</button>
       </div>
@@ -229,12 +253,14 @@ $query=mysqli_query($con,$sql);
 		function birthday(){
 			var birth_classid=$("input:text[name='birth_classid']").val();
 			var birthday=$("input:text[name='birthday']").val();
+			var isnongli=$("select[name='isnongli']").val();
 		    $.ajax({
 		        type: 'POST',
 		        url: 'php/addbirthday.php',
 		        data: {
 		        		classid: birth_classid,
-		                birthday: birthday
+		                birthday: birthday,
+		                isnongli: isnongli
 		            },
 		        dataType: 'json',
 		        cache: false,
@@ -300,9 +326,6 @@ while($array=mysqli_fetch_array($query))
 								case 0:
 									echo "试用 ".$array['name'];
 									break;
-								case 1:
-									echo $array['name'];
-									break;
 								case 2:
 									echo $array['name']." 回家了";
 									break;
@@ -325,16 +348,17 @@ while($array=mysqli_fetch_array($query))
 			<div class="col-md-12 col-sm-12 col-xs-12">
 			<?php
 			//判断登录是否成功
-			if (!empty($_POST['pwd'])&&$_POST['pwd']=="jiubugaosuni!") {
-				$_SESSION['admin']="right";
+			if (!empty($_SESSION['admin'])&&$_SESSION['admin']=="right") {
 			?>
-				<a href="php/user_table.php"><button type="button" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2" >用户管理</button></a>
+				<a href="php/user_table.php">
+					<button type="button" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2" >用户管理</button>
+				</a>
 				<button type="button" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2" onclick="javascript:muban();">导出值班表模板</button>
 				<button type="button" data-toggle="modal" data-target="#daoru" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">导入值班表</button>
 				<button type="button" data-toggle="modal" data-target="#daochu" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">统计值班情况</button>
 				<button type="button" data-toggle="modal" data-target="#birthday_add" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">添加生日</button>
-				<a href="php/makecsv.php?tuichu=tuichu"><!--借这个文件用一下，清除一下登录记录，懒得单独写个文件了-->
-					<button type="button" data-toggle="modal" data-target="#birthday_add" class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">退出登录</button>
+				<a href="index.php?tuichu=tuichu"><!--借这个文件用一下，清除一下登录记录，懒得单独写个文件了-->
+					<button class="btn btn-primary col-md-8 col-sm-8 col-xs-8 col-md-offset-2 col-sm-offset-2 col-xs-offset-2">退出登录</button>
 				</a>
 			<?php
 			}else{
@@ -382,13 +406,18 @@ while($array=mysqli_fetch_array($query))
 		<div id="scrollDiv">
 			<ul>
 				<?php
-					$today=date("m-d");
 					$show_birthday="select * from users";
 					$show_birthday_query=mysqli_query($con,$show_birthday);
 					while($show_birthday_array=mysqli_fetch_array($show_birthday_query))
 					{
+						$date=date("Y-m-d");
+						if ($show_birthday_array['isnongli']==1)
+						{
+							$lunar = new Lunar();
+							$date = date("Y-m-d",$lunar->S2L($date));
+						}
 						if (date("m-d",strtotime($date))==date("m-d",strtotime($show_birthday_array['birthday'])))
-						echo "<li>今天是".$show_birthday_array['name']."的生日</li>";
+						echo "<li>今天是".$show_birthday_array['name']."的".$rili[$show_birthday_array['isnongli']]."生日</li>";
 					}
 				?>
 			    <li>当你的翅膀没了力量，激情衰退，实在是飞不动的时候，就飞了一半了</li>
@@ -429,13 +458,12 @@ while($array=mysqli_fetch_array($query))
             // $("div#qiandao").click(function() {
             //     qiandao();
             // });//选择器调用js函数
-			function BindEnter(obj) {
-			//使用document.getElementById获取到按钮对象    
+			function BindEnter(obj) {//监控回车按键，完成签到操作
 				var button = document.getElementById('qiandao');    
-				if(obj.keyCode == 13)        
+				if(obj.keyCode == 13)
 				{
-					button.click();           
-					obj.returnValue = false;        
+					button.click();
+					obj.returnValue = false; 
 				}
 			}
             function qiandao(){

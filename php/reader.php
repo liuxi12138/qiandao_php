@@ -86,7 +86,7 @@ while($line=fgetcsv($file))//一直取到文件结束，此事返回false
 	    $select_user_array=mysqli_fetch_array($select_user_qurey);
 	    if (empty($select_user_array))
 	    {
-	      $sql="insert into users(id,classid,name,depart,birthday,class) values('','$classid','$name','$depart','$birthday','$class');";
+	      $sql="insert into users(classid,name,depart,birthday,class) values('$classid','$name','$depart','$birthday','$class');";
 	      mysqli_query($con,$sql)or die('插入用户失败');
 	      // echo $name."用户<br />";
 	    }
@@ -102,7 +102,7 @@ while($line=fgetcsv($file))//一直取到文件结束，此事返回false
 			// var_dump($select_userdutys_array);
 			if(empty($select_userdutys_array))
 			{
-				$sql_2="insert into user_dutys(id,classid,onweek,ontime) values('','$classid','$onweek[$i]','$ontime[$i]');";
+				$sql_2="insert into user_dutys(classid,onweek,ontime) values('$classid','$onweek[$i]','$ontime[$i]');";
 				mysqli_query($con,$sql_2)or die('插入值班时间失败');
 				echo "插入".$onweek["$i"].",".$ontime["$i"]."的值班记录成功<br />";
 			}else{
