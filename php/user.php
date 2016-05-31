@@ -40,7 +40,7 @@ if(!empty($_SESSION['admin']))
         }
         if (empty($select_user_array))
         {
-          $sql="insert into users(id,classid,name,depart,birthday,class,isnongli) values('','$classid','$name','$depart','$birthday','$class','$isnongli');";
+          $sql="insert into users(classid,name,depart,birthday,class,isnongli) values('$classid','$name','$depart','$birthday','$class','$isnongli');";
           mysqli_query($con,$sql)or die('插入用户失败');
         }
         for($i=0;$i<$count;$i++)
@@ -51,7 +51,7 @@ if(!empty($_SESSION['admin']))
           // var_dump($select_userdutys_array);
           if(empty($select_userdutys_array))
           {
-            $sql_2="insert into user_dutys(id,classid,onweek,ontime) values('','$classid','$onweek[$i]','$ontime[$i]');";
+            $sql_2="insert into user_dutys(classid,onweek,ontime) values('$classid','$onweek[$i]','$ontime[$i]');";
             mysqli_query($con,$sql_2)or die('插入值班时间失败');
             echo "插入".$onweek["$i"].",".$ontime["$i"]."的值班记录成功<br />";
           }else{
@@ -86,7 +86,7 @@ if(!empty($_SESSION['admin']))
         for ($i=0; $i<$count; $i++) {
           if($onweek[$i]!=0 && $ontime[$i]!=0)
           {
-            $new_user_dutys="insert into user_dutys(id,classid,onweek,ontime) value('','$classid','$onweek[$i]','$ontime[$i]')";
+            $new_user_dutys="insert into user_dutys(classid,onweek,ontime) value('$classid','$onweek[$i]','$ontime[$i]')";
             mysqli_query($con,$new_user_dutys);
             header("location:user.php?classid=$classid");
           }
