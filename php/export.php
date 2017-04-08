@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL);
-date_default_timezone_set('Asia/Shanghai');
+// date_default_timezone_set('Asia/Shanghai');
 header("Content-Type: text/html;charset=utf-8");
 include('conn.php');
 require_once 'Classes/PHPExcel.php';
@@ -24,7 +24,6 @@ $eweek=date("N",strtotime($edate));
 $sum_weeks=floor($sum_days/7);
 
 
-
 //创建excel操作对象
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->getProperties()->setCreator("青春在线")
@@ -39,17 +38,19 @@ $objPHPExcel->getProperties()->setCreator("青春在线")
 $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A1', '姓名')
             ->setCellValue('B1', '值班总次数')
-            ->setCellValue('C1', '未签退')
-            ->setCellValue('D1', '按要求在岗')
-            ->setCellValue('E1', '早退次数')
-            ->setCellValue('F1', '额外值班次数')
-            ->setCellValue('G1', '缺勤次数')
-            ->setCellValue('H1', '缺勤时间');
+            ->setCellValue('C1', '值班总时间')
+            ->setCellValue('D1', '未签退')
+            ->setCellValue('E1', '按要求在岗')
+            ->setCellValue('F1', '早退次数')
+            ->setCellValue('G1', '额外值班次数')
+            ->setCellValue('H1', '缺勤次数')
+            ->setCellValue('I1', '缺勤时间');
 
     $x=2;
     $user_query=mysqli_query($con,"select * from users where class=0 or class=1;");
 while($user_array=mysqli_fetch_array($user_query))
 {
+        $sum_time=0;$sum_time_ymd=date("H:i:s",$sum_time);
         $classid=$user_array['classid'];
         $sql="select *,count(*) from dutys where `classid`='$classid' and date >= '$sdate' and date <= '$edate';";
         $query=mysqli_query($con,$sql);
@@ -102,7 +103,20 @@ while($user_array=mysqli_fetch_array($user_query))
         }
         //是否缺勤算法end
 
-        $early_sql="select count(*) from dutys where classid='$classid' and early=1 and over=1";
+        //值班总时间begin
+        $sum_time_sql="select * from dutys where `classid`='$classid' and date >= '2017-04-05' and date <= '2017-04-08';";
+        $sum_time_query=mysqli_query($con,$sum_time_sql);
+        while($sum_time_array=mysqli_fetch_array($sum_time_query))
+        {
+            $stime=$sum_time_array['stime'];
+            $etime=$sum_time_array['etime'];
+            $sum_time_add=strtotime($etime)-strtotime($stime);
+            $sum_time=$sum_time+$sum_time_add;
+            $sum_time_ymd=date('H:i:s',$sum_time);
+        }
+        //值班总时间end
+
+        $early_sql="select count(*) from dutys where classid='$classid' and date >= '$sdate' and date <= '$edate' and early=1 and over=1";
         $early_query=mysqli_query($con,$early_sql);
         $early=mysqli_fetch_array($early_query);
         $queqin_xiangxi="";
@@ -115,13 +129,14 @@ while($user_array=mysqli_fetch_array($user_query))
     $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue("A$x", $user_name)
             ->setCellValue("B$x", $array['count(*)'])
-            ->setCellValue("C$x", $over_array['count(*)'])
-            ->setCellValue("D$x", $anshi_zhiban)
-            ->setCellValue("E$x", $early["count(*)"])
-            ->setCellValue("F$x", $ewai_zhiban=$array['count(*)']-$anpai_zhiban)
-            ->setCellValue("G$x", $no_anshi_zhiban)
-            ->setCellValue("H$x", $queqin_xiangxi);
-    $objPHPExcel->getActiveSheet()->getStyle("A1:H$x")->getAlignment()->setWrapText(true);//自动换行
+            ->setCellValue("C$x", $sum_time_ymd)
+            ->setCellValue("D$x", $over_array['count(*)'])
+            ->setCellValue("E$x", $anshi_zhiban)
+            ->setCellValue("F$x", $early["count(*)"])
+            ->setCellValue("G$x", $ewai_zhiban=$array['count(*)']-$anpai_zhiban)
+            ->setCellValue("H$x", $no_anshi_zhiban)
+            ->setCellValue("I$x", $queqin_xiangxi);
+    $objPHPExcel->getActiveSheet()->getStyle("A1:I$x")->getAlignment()->setWrapText(true);//自动换行
     $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(15);
     // //设置列宽
     $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth('15');
@@ -131,7 +146,8 @@ while($user_array=mysqli_fetch_array($user_query))
     $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth('15');
     $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth('15');
     $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth('15');
-    $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth('30');
+    $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth('15');
+    $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth('30');
 
     // // 设置行高
     // $objPHPExcel->getActiveSheet()->getRowDimension("2")->setRowHeight("150");
@@ -159,7 +175,7 @@ $filename=$sdate."-".$edate.".xlsx";
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save($filename);
 $oldname=dirname(__FILE__)."\\".$filename;
-$newname="c:\\".$filename;
+$newname="e:\\meilideshouzhenguniang\\".$filename;
 rename("$oldname", "$newname");//移动文件
 // copy("$oldname", "$newname");//复制文件
 $data['daochu']="success";

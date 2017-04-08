@@ -47,16 +47,18 @@ $data=array();//fgetcsv — 从文件指针中读入一行并解析 CSV 字段
 $row=0;
 $field=array("classid","name","depart","birthday","class","onweek_all");
 // $on_title=array("onweek","ontime");
+//echo $line=fgetcsv($file);
 while($line=fgetcsv($file))//一直取到文件结束，此事返回false
 {
 	foreach ($line as $key => $value) 
 	{
 		// $data[$row][$key]= iconv("utf-8","gb2312//IGNORE", $value);
 		$data[$row][$field[$key]]=mb_convert_encoding($value,"utf-8","GBK");
+		//$data[$row][$field[$key]]=mb_convert_encoding($value,"GBK","utf-8");
 		
 	}
 	$on=explode(",",$data[$row]['onweek_all']);
-	// echo count($data[$row]['onweek']);
+	//echo count($data[$row]['onweek']);
 	for ($j=0;$j < count($on);$j++)
 	{
 		$on_title[$j]=explode("|",$on[$j]);
@@ -66,7 +68,7 @@ while($line=fgetcsv($file))//一直取到文件结束，此事返回false
 	$row++;
 }
 
-// var_dump($data);
+//var_dump($data);
 	for ($x=1; $x<$row; $x++)
 	{
 	    $count=$j;
@@ -87,12 +89,14 @@ while($line=fgetcsv($file))//一直取到文件结束，此事返回false
 	    if (empty($select_user_array))
 	    {
 	      $sql="insert into users(classid,name,depart,birthday,class) values('$classid','$name','$depart','$birthday','$class');";
+	      //var_dump($select_user_array);
 	      mysqli_query($con,$sql)or die('插入用户失败');
-	      // echo $name."用户<br />";
+	      //echo $name."用户<br />";
 	    }
 	    // echo $name."用户<br />";
 	    // var_dump($data[$x]);
 	    // var_dump($onweek);
+		/*
 	    for($i=0;$i<$count;$i++)
 	    {
 			$select_userdutys_sql="select * from user_dutys where classid='$classid' and onweek='".$onweek["$i"]."' and ontime='".$ontime["$i"]."';";
@@ -108,7 +112,18 @@ while($line=fgetcsv($file))//一直取到文件结束，此事返回false
 			}else{
 				echo "有".$onweek["$i"].",".$ontime["$i"]."的值班记录了<br />";
 			}
+	    }只查重，没关多余的*/
+		for($i=0;$i<$count;$i++)
+	    {
+			$delete_userdutys_sql="delete from user_dutys where classid='$classid';";
+			$delete_userdutys_qurey=mysqli_query($con,$delete_userdutys_sql);
 	    }
+		for($i=0;$i<$count;$i++)
+	    {
+			$sql_2="insert into user_dutys(classid,onweek,ontime) values('$classid','$onweek[$i]','$ontime[$i]');";
+			mysqli_query($con,$sql_2)or die('插入值班时间失败');
+			//echo "插入".$onweek["$i"].",".$ontime["$i"]."的值班记录成功<br />";
+		}
 	    echo $name."插入成功<br />";
 		}
 	}
@@ -120,6 +135,7 @@ while($line=fgetcsv($file))//一直取到文件结束，此事返回false
 	<title>读取excel文件</title>
 </head>
 <body>
+<a href="../index.php">返回首页</a>
 <form method="post" enctype="multipart/form-data">
         <h3>导入Excel表：</h3>
         <input  type="file" name="file_stu" />

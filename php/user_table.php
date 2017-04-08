@@ -24,7 +24,7 @@ if(!empty($_SESSION['admin']))
 			$delete_shiyong="delete from `users` where id='$user_array[$i]'";
 			mysqli_query($con,$delete_shiyong) or die('users失败');
 		}
-		echo "清删除试用成员值班记录、值班表、用户信息";
+		echo "清删除试用成员值班记录、值班表、用户信息<br><a href=\"user_table.php\">返回继续管理</a><br><a href=\"../index.php\">返回首页</a>";
 	}
 	else if(!empty($_POST['delete_zhengshi']))
 	{
@@ -43,15 +43,26 @@ if(!empty($_SESSION['admin']))
 			$update_zhengshi_tuizhan="update `users` set class=2 where classid='$select_user_array[classid]'";
 			mysqli_query($con,$update_zhengshi_tuizhan) or die('update失败');
 		}
-		echo "删除退站成员值班表和值班记录，保留用户信息";
+		echo "删除退站成员值班表和值班记录，保留用户信息<br><a href=\"user_table.php\">返回继续管理</a><br><a href=\"../index.php\">返回首页</a>";
 	}
-	else if(!empty($_POST['delete_all']))
+	else if(!empty($_POST['delete_stoz']))
 	{
-		$truncate_users="TRUNCATE TABLE `users`";
-		mysqli_query($con,$truncate_users);
-		$truncate_user_dutys="TRUNCATE TABLE `user_dutys`";
-		mysqli_query($con,$truncate_user_dutys);
-		echo "清空用户表和值班表，保留签到记录";
+		$user_array=$_POST['user_array'];
+		$num = count($user_array);
+		for($i=0;$i<$num;$i++){
+			$select_user="select * from `users` where id='$user_array[$i]'";
+			$select_user_query=mysqli_query($con,$select_user) or die ('select失败');
+			$select_user_array=mysqli_fetch_array($select_user_query);
+
+			$delete_zhengshi_dutys="delete from `dutys` where classid='$select_user_array[classid]';";
+			mysqli_query($con,$delete_zhengshi_dutys) or die('dutys失败');
+			$delete_zhengshi_userduty="delete from `user_dutys` where classid='$select_user_array[classid]'";
+			mysqli_query($con,$delete_zhengshi_userduty) or die('user_dutys失败');
+
+			$update_zhengshi_tuizhan="update `users` set class=1 where classid='$select_user_array[classid]'";
+			mysqli_query($con,$update_zhengshi_tuizhan) or die('update失败');
+		}
+		echo "已经改成正式成员<br><a href=\"user_table.php\">返回继续管理</a><br><a href=\"../index.php\">返回首页</a>";
 	}
 	else
 	{
@@ -97,8 +108,8 @@ if(!empty($_SESSION['admin']))
 
 		?>
 		<input type="submit" name="delete_shiyong" class="btn btn-danger" value="删除选定的试用成员">
+		<input type="submit" name="delete_stoz" class="btn btn-danger" value="已经被确定正式">
 		<input type="submit" name="delete_zhengshi" class="btn btn-danger" value="正式成员的退站">
-		<input type="submit" name="delete_all" class="btn btn-danger" value="清空值班表及成员名单">
 		<a href="user.php"><input class="btn btn-success" value="添加值班人员"></a>
 		<a href="../index.php"><input class="btn btn-success" value="返回首页"></a>
 	</form>

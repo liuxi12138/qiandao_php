@@ -29,7 +29,7 @@ $query=mysqli_query($con,$sql);
 	</script>
 	<?php
 		//验证密码定义session
-		if (!empty($_POST['pwd'])&&$_POST['pwd']=="jiubugaosuni!")
+		if (!empty($_POST['pwd'])&&$_POST['pwd']=="nikendingbuzhidao!")
 		{
 			$_SESSION['admin']="right";
 		}
@@ -420,8 +420,17 @@ while($array=mysqli_fetch_array($query))
 						echo "<li>今天是".$show_birthday_array['name']."的".$rili[$show_birthday_array['isnongli']]."生日</li>";
 					}
 				?>
-			    <li>当你的翅膀没了力量，激情衰退，实在是飞不动的时候，就飞了一半了</li>
-			    <li>每天叫你起床的不是闹钟，是梦想</li>
+				<li>青春在线，精彩无限。</li>
+				<li>网站是我们的孩子，我们是网站的孩子。</li>
+
+				<li>有什么问题记得向学长学姐请教，千万不要害羞哦。</li>
+				<li>美好大学时光，感谢有你相伴。</li>
+				<li>早晨值班记得给网站打扫卫生哦。</li>
+			    <!-- <li>当你的翅膀没了力量，激情衰退，实在是飞不动的时候，就飞了一半了。</li> -->
+			    <li>一定要珍惜在网站的每一天哦。</li>
+				<li>想加自定义的话可以联系程序猿/媛。</li>
+			    <!-- <li>每天叫你起床的不是闹钟，是梦想。</li> -->
+
 			</ul>
 		</div>
 		<style type="text/css">
@@ -506,8 +515,6 @@ while($array=mysqli_fetch_array($query))
 							      alert("请继续享受在网站的时光吧！");
 							      window.location.href=window.location.href;
 							    }
-                        		// alert('早退');
-                        		// window.location.href=window.location.href;
                         		break;
                         	default:
                         		alert("签到程序报错，请联系程序员");
